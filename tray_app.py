@@ -6,6 +6,10 @@ import subprocess
 from pathlib import Path
 from typing import Optional
 import math
+import json
+from astral import LocationInfo
+from astral.sun import sun
+import datetime
 
 try:
     import pystray
@@ -16,6 +20,62 @@ except ImportError:
 
 # Reason: Registry manipulation is required to toggle Windows Dark/Light mode
 import winreg
+
+CONFIG_FILE = "user_location.json"
+
+
+def get_user_location():
+    """
+    Retrieve user location from config or prompt user for city/country.
+    Returns:
+        LocationInfo: Astral location object
+    """
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r') as f:
+            data = json.load(f)
+            return LocationInfo(data['city'], data['region'], data['timezone'], data['latitude'], data['longitude'])
+    else:
+        print("To enable automatic switching at sunrise/sunset, please enter your city and country.")
+        city = input("City: ")
+        region = input("Region/Country: ")
+        timezone = input("Timezone (e.g., Europe/London): ")
+        latitude = float(input("Latitude: "))
+        longitude = float(input("Longitude: "))
+        with open(CONFIG_FILE, 'w') as f:
+            json.dump({'city': city, 'region': region, 'timezone': timezone, 'latitude': latitude, 'longitude': longitude}, f)
+        return LocationInfo(city, region, timezone, latitude, longitude)
+
+
+def schedule_sunset_sunrise_switch():
+    """
+    Background thread to switch theme at sunrise and sunset.
+    """
+    location = get_user_location()
+    while True:
+        today = datetime.date.today()
+        s = sun(location.observer, date=today, tzinfo=location.timezone)
+        now = datetime.datetime.now(s['sunrise'].tzinfo)
+        # Calculate next event
+        if now < s['sunrise']:
+            next_event = s['sunrise']
+            next_mode = False  # Light mode
+        elif now < s['sunset']:
+            next_event = s['sunset']
+            next_mode = True  # Dark mode
+        else:
+            # Next sunrise is tomorrow
+            tomorrow = today + datetime.timedelta(days=1)
+            s2 = sun(location.observer, date=tomorrow, tzinfo=location.timezone)
+            next_event = s2['sunrise']
+            next_mode = False  # Light mode
+        seconds = (next_event - now).total_seconds()
+        if seconds > 0:
+            print(f"Next auto-switch to {'Dark' if next_mode else 'Light'} mode at {next_event}")
+            time.sleep(seconds)
+            set_dark_mode(next_mode)
+        else:
+            # Defensive: wait a minute and recalculate
+            time.sleep(60)
 
 def is_dark_mode() -> bool:
     """
@@ -87,7 +147,10 @@ def main():
     """
     Main entry point for the tray application.
     Handles left-click toggling if supported by pystray, otherwise uses menu.
+    Also starts a background thread to automatically switch between dark and light mode at sunset and sunrise using astral.
     """
+    # Start the auto-switch thread
+    threading.Thread(target=schedule_sunset_sunrise_switch, daemon=True).start()
     dark = is_dark_mode()
     icon = pystray.Icon(
         "DarkToLight",
@@ -104,6 +167,7 @@ def main():
     else:
         print("Left-click toggle is not supported in this backend. Use the menu to toggle mode.")
     icon.run()
+
 
 if __name__ == "__main__":
     main()
