@@ -1,0 +1,6 @@
+# .gitignore for darktolight
+venv/
+__pycache__/
+*.pyc
+.env
+.windsurf/
