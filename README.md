@@ -1,6 +1,6 @@
 # DarkToLight Tray Application
 
-**Version:** 0.1.0
+**Version:** 0.01.4
 
 A Windows 11 system tray application to toggle between Dark Mode and Light Mode with a simple tray icon, as per the PLANNING.md.
 
