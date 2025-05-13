@@ -1,6 +1,6 @@
 # DarkToLight Tray Application
 
-**Version:** 0.01.4
+**Version:** 0.01.5
 
 A Windows 11 system tray application to toggle between Dark Mode and Light Mode with a simple tray icon, as per the PLANNING.md.
 
@@ -19,6 +19,10 @@ A Windows 11 system tray application to toggle between Dark Mode and Light Mode 
   ```
 
 ## Usage
+### Recommended: Start with the batch file
+1. Double-click `start_darktolight.bat` to automatically activate the virtual environment, install requirements, and launch the app.
+
+### Manual method
 1. Activate your Python virtual environment.
 2. Install requirements: `pip install -r requirements.txt`
 3. Run the app:

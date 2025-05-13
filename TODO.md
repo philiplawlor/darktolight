@@ -5,6 +5,7 @@
 - [ ] Improve documentation
 - [ ] Add CI/CD workflow
 - [ ] Add user preferences persistence
+- [x] Add batch file to start app easily (0.01.5)
 
 ---
 
