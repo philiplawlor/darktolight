@@ -2,29 +2,103 @@
 
 **Version:** 0.01.5
 
-A Windows 11 system tray application to toggle between Dark Mode and Light Mode with a simple tray icon, as per the PLANNING.md.
+A Windows 11 system tray application to toggle between Dark Mode and Light Mode with a simple tray icon. Designed for convenience, automation, and user customization.
+
+---
 
 ## Features
-- Tray icon in the Windows task bar
-- Toggle between Dark and Light modes with a click
-- Moon icon for dark mode, sun icon for light mode
+- **Tray Icon:** Sits in the Windows system tray for quick access
+- **Dark/Light Toggle:** Instantly switch between Windows 11 Dark and Light modes with a single click
+- **Visual Feedback:** Moon icon for dark mode, sun icon for light mode
+- **Batch File Launcher:** One-click batch file (`start_darktolight.bat`) to set up and start the app
+- **Automatic Dependency Management:** Installs required Python libraries if missing
+- **Virtual Environment Support:** Ensures isolated package management
+- **Status Persistence:** Remembers your last mode (if implemented in future)
+- **Extensible:** Easily add new features, such as auto-switch at sunset/sunrise or user preferences
 
-## Requirements
-- Python 3.8+
-- Windows 11
-- Virtual environment recommended
-- Install dependencies:
-  ```sh
-  pip install -r requirements.txt
-  ```
+---
+
+## Setup
+
+### 1. Clone or Download
+Clone this repo or download and extract the ZIP file.
+
+### 2. Create a Virtual Environment (Recommended)
+```sh
+python -m venv venv
+```
+
+### 3. Install Dependencies
+```sh
+pip install -r requirements.txt
+```
+
+---
 
 ## Usage
-### Recommended: Start with the batch file
-1. Double-click `start_darktolight.bat` to automatically activate the virtual environment, install requirements, and launch the app.
 
-### Manual method
-1. Activate your Python virtual environment.
-2. Install requirements: `pip install -r requirements.txt`
+### (A) Quick Start: Batch File
+1. Double-click `start_darktolight.bat`.
+   - Activates the virtual environment
+   - Installs required libraries
+   - Launches the tray app
+
+### (B) Manual Start
+1. Activate your Python virtual environment:
+   ```sh
+   venv\Scripts\activate
+   ```
+2. Install requirements:
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. Launch the app:
+   ```sh
+   python tray_app.py
+   ```
+
+---
+
+## Tray Icon & App Behavior
+- **Tray Icon:** Appears in the system tray when running
+- **Toggle:** Click the icon to switch between Dark and Light modes
+- **Icon:** Sun = Light mode, Moon = Dark mode
+- **Tooltip:** Shows current mode
+- **Exit:** Right-click and select Exit (if menu implemented) or close the process manually
+
+---
+
+## How It Works
+- Modifies Windows Registry key `AppsUseLightTheme` to switch modes
+- No admin rights required (modifies current user settings)
+- Safe to run repeatedly
+
+---
+
+## Environment & Configuration
+- No environment variables required for default usage
+- All config is local to your user account
+- Python virtual environment strongly recommended
+
+---
+
+## Troubleshooting
+- **Tray icon not visible:** Ensure the app is running and check the hidden icons area
+- **Permissions error:** Run terminal as your user, not as admin
+- **Missing dependencies:** Use the batch file or run `pip install -r requirements.txt`
+- **Python not found:** Ensure Python 3.8+ is installed and added to PATH
+
+---
+
+## Contributing
+- Fork the repo and submit a pull request
+- Open issues for bugs or feature requests
+- See TODO.md for planned features
+
+---
+
+## License
+MIT
 3. Run the app:
    ```sh
    python tray_app.py
