@@ -1,0 +1,15 @@
+Track changes with a version number in the README.md file with the major.minor.patch format.
+
+Always update the README.md file with any changes made to the codebase. Set the .env file to the a generic sample version before pushing to git.
+
+Create a CHANGES.md file to document changes between versions.
+
+Add new feature requests/changes to the TODO.md file.
+
+Strikethrough items from the TODO.md list that are done, include the version number.
+
+Create a new git repo and push changes to the repository when things are working nicely.
+
+My tech stack is python, flask, sqlalchemy, alembic, pytest, flutter, mongodb atlas
+
+Always work in a python virtual environment.
