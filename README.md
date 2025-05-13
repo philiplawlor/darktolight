@@ -15,6 +15,7 @@ A Windows 11 system tray application to toggle between Dark Mode and Light Mode 
 - **Virtual Environment Support:** Ensures isolated package management
 - **Status Persistence:** Remembers your last mode (if implemented in future)
 - **Extensible:** Easily add new features, such as auto-switch at sunset/sunrise or user preferences
+- **Limitations:** Double-clicking the tray icon is not supported due to Python environment limitations.
 
 ---
 
