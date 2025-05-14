@@ -1,6 +1,6 @@
 # DarkToLight Tray Application
 
-**Version:** 0.01.6
+**Version:** 0.1.1
 
 A Windows 11 system tray application to toggle between Dark Mode and Light Mode with a simple tray icon. Designed for convenience, automation, and user customization.
 
@@ -16,6 +16,7 @@ A Windows 11 system tray application to toggle between Dark Mode and Light Mode 
 - **Status Persistence:** Remembers your last mode (if implemented in future)
 - **Extensible:** Easily add new features, such as auto-switch at sunset/sunrise or user preferences
 - **Automatic Theme Switching:** Automatically changes to dark mode at sunset and light mode at sunrise based on your location (uses astral, prompts for city/coordinates on first run)
+- **Robust Error Handling:** App will exit immediately with a clear message if user_location.json is missing or contains an invalid timezone.
 - **Limitations:** Double-clicking the tray icon is not supported due to Python environment limitations.
 
 ---

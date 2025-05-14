@@ -4,6 +4,9 @@
 - Initial release: Tray app toggles Windows 11 Dark/Light mode via system tray icon.
 - Moon icon for dark mode, sun icon for light mode.
 
+## [0.1.1] - 2025-05-13
+- Feature: Graceful exit with clear message if user_location.json is missing or contains invalid timezone. Prevents app from running with bad config.
+
 ## [0.01.6] - 2025-05-13
 - Added automatic dark/light switching at sunset/sunrise using astral
 

@@ -10,6 +10,7 @@ import json
 from astral import LocationInfo
 from astral.sun import sun
 import datetime
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 try:
     import pystray
@@ -33,12 +34,23 @@ def get_user_location():
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, 'r') as f:
             data = json.load(f)
+            try:
+                # Validate timezone
+                ZoneInfo(data['timezone'])
+            except ZoneInfoNotFoundError:
+                print(f"Error: No time zone found with key '{data['timezone']}'. Please edit or delete user_location.json and restart.")
+                sys.exit(1)
             return LocationInfo(data['city'], data['region'], data['timezone'], data['latitude'], data['longitude'])
     else:
         print("To enable automatic switching at sunrise/sunset, please enter your city and country.")
         city = input("City: ")
         region = input("Region/Country: ")
         timezone = input("Timezone (e.g., Europe/London): ")
+        try:
+            ZoneInfo(timezone)
+        except ZoneInfoNotFoundError:
+            print(f"Error: No time zone found with key '{timezone}'. Exiting.")
+            sys.exit(1)
         latitude = float(input("Latitude: "))
         longitude = float(input("Longitude: "))
         with open(CONFIG_FILE, 'w') as f:
@@ -49,8 +61,16 @@ def get_user_location():
 def schedule_sunset_sunrise_switch():
     """
     Background thread to switch theme at sunrise and sunset.
+    Exits immediately if user_location is invalid.
     """
-    location = get_user_location()
+    try:
+        location = get_user_location()
+    except SystemExit:
+        # Already printed error, just exit thread
+        os._exit(1)
+    except Exception as e:
+        print(f"Fatal error loading user location: {e}")
+        os._exit(1)
     while True:
         today = datetime.date.today()
         s = sun(location.observer, date=today, tzinfo=location.timezone)
@@ -170,4 +190,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        # Allow sys.exit() to propagate
+        raise
+    except Exception as e:
+        print(f"Fatal error: {e}")
+        sys.exit(1)
